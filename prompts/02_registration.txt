@@ -1,0 +1,1 @@
+Create the complete code for a registration form screen for a native Android application using Jetpack Compose with Material 3. The screen must include the following input fields: first name, last name, email, password, date of birth (as a plain text field), and gender (as a dropdown menu), as well as "Submit" and "Cancel" buttons.

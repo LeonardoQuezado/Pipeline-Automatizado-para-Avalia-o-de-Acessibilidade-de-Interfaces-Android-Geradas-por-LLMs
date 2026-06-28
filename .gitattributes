@@ -1,0 +1,2 @@
+# Ensure Unix line endings for shell scripts, regardless of git client OS
+templates/android-project/gradlew  text  eol=lf

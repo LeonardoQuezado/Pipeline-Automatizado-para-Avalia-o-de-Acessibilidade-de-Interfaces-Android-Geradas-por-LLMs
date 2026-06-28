@@ -1,0 +1,1 @@
+Create the complete code for a login screen for a native Android application using Jetpack Compose with Material 3. The screen must include a welcome message, email and password input fields, a "Login" button, and a "Forgot Password?" text button below the form.

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accessibility LLM Pipeline — Resumo do Projeto</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #1a1a2e;
+      background: #fff;
+      padding: 0;
+    }
+
+    /* ── Print setup ─────────────────────────────────── */
+    @page {
+      size: A4;
+      margin: 20mm 18mm 20mm 18mm;
+    }
+
+    @media print {
+      body { font-size: 10pt; }
+      .cover { page-break-after: always; }
+      section { page-break-inside: avoid; }
+      h2 { page-break-after: avoid; }
+      .no-break { page-break-inside: avoid; }
+    }
+
+    /* ── Cover page ─────────────────────────────────── */
+    .cover {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      background: linear-gradient(135deg, #0f3460 0%, #16213e 60%, #1a1a2e 100%);
+      color: #fff;
+      padding: 60px 40px;
+    }
+
+    .cover .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 4px 18px;
+      font-size: 9pt;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .cover h1 {
+      font-size: 28pt;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .cover h1 span { color: #e94560; }
+
+    .cover .subtitle {
+      font-size: 13pt;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 48px;
+      max-width: 520px;
+    }
+
+    .cover .meta {
+      font-size: 10pt;
+      color: rgba(255,255,255,0.5);
+      border-top: 1px solid rgba(255,255,255,0.2);
+      padding-top: 24px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .cover .meta p { margin: 4px 0; }
+
+    /* ── Content pages ─────────────────────────────── */
+    .content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 32px;
+    }
+
+    /* ── Headings ─────────────────────────────────── */
+    h2 {
+      font-size: 15pt;
+      font-weight: 700;
+      color: #0f3460;
+      border-bottom: 2px solid #e94560;
+      padding-bottom: 6px;
+      margin: 36px 0 16px;
+    }
+
+    h3 {
+      font-size: 11.5pt;
+      font-weight: 600;
+      color: #16213e;
+      margin: 22px 0 8px;
+    }
+
+    p { margin-bottom: 10px; }
+
+    /* ── Phase cards ─────────────────────────────── */
+    .phases {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .phase-card {
+      background: #f4f6fb;
+      border-left: 3px solid #0f3460;
+      border-radius: 6px;
+      padding: 12px 14px;
+    }
+
+    .phase-card .num {
+      font-size: 8pt;
+      font-weight: 700;
+      color: #e94560;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .phase-card .title {
+      font-weight: 600;
+      font-size: 10pt;
+      margin: 2px 0 6px;
+    }
+
+    .phase-card .desc {
+      font-size: 9pt;
+      color: #555;
+      line-height: 1.4;
+    }
+
+    /* ── Tables ──────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 10pt;
+    }
+
+    th {
+      background: #0f3460;
+      color: #fff;
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 7px 12px;
+      border-bottom: 1px solid #e8eaf0;
+    }
+
+    tr:nth-child(even) td { background: #f8f9fd; }
+
+    .tag {
+      display: inline-block;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 8.5pt;
+      font-weight: 600;
+    }
+
+    .tag-error  { background: #fde8e8; color: #c0392b; }
+    .tag-warn   { background: #fef3cd; color: #8a6900; }
+    .tag-ok     { background: #e8f5e9; color: #2e7d32; }
+    .tag-blue   { background: #e3f2fd; color: #1565c0; }
+
+    /* ── Two-column pros/cons ────────────────────── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 14px 0;
+    }
+
+    .box {
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .box-green { background: #e8f5e9; border: 1px solid #a5d6a7; }
+    .box-red   { background: #fde8e8; border: 1px solid #ef9a9a; }
+
+    .box h3 { margin: 0 0 10px; font-size: 10.5pt; }
+    .box-green h3 { color: #2e7d32; }
+    .box-red   h3 { color: #c62828; }
+
+    .box ul { padding-left: 18px; }
+    .box ul li { font-size: 9.5pt; margin-bottom: 5px; line-height: 1.4; }
+
+    /* ── Future work list ────────────────────────── */
+    .future-list {
+      list-style: none;
+      padding: 0;
+      margin: 14px 0;
+    }
+
+    .future-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 14px;
+      background: #f4f6fb;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 10pt;
+    }
+
+    .future-list li .icon {
+      font-size: 14pt;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .future-list li .text strong {
+      display: block;
+      font-size: 10pt;
+      margin-bottom: 2px;
+    }
+
+    .future-list li .text span {
+      font-size: 9pt;
+      color: #555;
+    }
+
+    /* ── Arch diagram box ────────────────────────── */
+    .arch {
+      background: #0f3460;
+      color: #e8eaf0;
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-family: 'Courier New', monospace;
+      font-size: 9pt;
+      line-height: 1.7;
+      margin: 16px 0;
+      overflow: hidden;
+    }
+
+    .arch .accent { color: #e94560; font-weight: bold; }
+    .arch .dim    { color: #7986a8; }
+
+    /* ── Stack grid ─────────────────────────────── */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .stack-item {
+      background: #f4f6fb;
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+      font-size: 9pt;
+    }
+
+    .stack-item .sname { font-weight: 700; font-size: 9.5pt; color: #0f3460; }
+    .stack-item .srole { color: #666; font-size: 8.5pt; margin-top: 2px; }
+
+    /* ── Footer ─────────────────────────────────── */
+    .footer {
+      text-align: center;
+      font-size: 8.5pt;
+      color: #999;
+      border-top: 1px solid #e8eaf0;
+      margin-top: 48px;
+      padding-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     CAPA
+     ══════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="badge">Dissertação de Mestrado</div>
+  <h1>Accessibility<br/><span>LLM</span> Pipeline</h1>
+  <p class="subtitle">
+    Pipeline automatizado para geração e análise de acessibilidade<br/>
+    em aplicações Android com uso de Large Language Models
+  </p>
+  <div class="meta">
+    <p><strong>Resumo do Projeto</strong></p>
+    <p>Estado atual · Funcionalidades · Trabalho futuro</p>
+    <p style="margin-top:12px; font-size:9pt;">Abril de 2026</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     CONTEÚDO
+     ══════════════════════════════════════════════════════════ -->
+<div class="content">
+
+  <!-- ── 1. Visão geral ─────────────────────────────────── -->
+  <h2>1. Visão Geral</h2>
+  <p>
+    O <strong>Accessibility LLM Pipeline</strong> é uma ferramenta de pesquisa desenvolvida como
+    tema de dissertação de mestrado. Seu objetivo é investigar a capacidade dos grandes modelos de
+    linguagem (LLMs) em gerar código Android acessível, medindo automaticamente o resultado com
+    análise estática de acessibilidade.
+  </p>
+  <p>
+    A ferramenta recebe um <em>prompt</em> descrevendo uma tela Android, envia esse prompt
+    simultaneamente a múltiplos LLMs, compila o código gerado em um APK real e executa o
+    <strong>Android Lint</strong> com um conjunto de regras de acessibilidade selecionadas, produzindo
+    um relatório comparativo entre os modelos.
+  </p>
+  <p>
+    Todo o ambiente é containerizado com <strong>Docker</strong> e expõe uma interface web acessível
+    em <code>http://localhost:8000</code>, sem necessidade de instalar Android Studio, SDK ou JDK
+    na máquina do pesquisador.
+  </p>
+
+  <!-- ── 2. Pipeline ───────────────────────────────────── -->
+  <h2>2. Fases do Pipeline</h2>
+
+  <div class="phases">
+    <div class="phase-card">
+      <div class="num">Fase 1</div>
+      <div class="title">Entrada do Prompt</div>
+      <div class="desc">Pesquisador descreve a tela via interface web ou arquivo <code>prompt.txt</code>. Instruções técnicas fixas são anexadas automaticamente.</div>
+    </div>
+    <div class="phase-card">
+      <div class="num">Fase 2</div>
+      <div class="title">Geração de Código</div>
+      <div class="desc">Prompt enviado em paralelo para Gemini, OpenAI e Anthropic via SDK assíncrono (<code>asyncio.gather</code>). Cada LLM retorna Kotlin + XML.</div>
+    </div>
+    <div class="phase-card">
+      <div class="num">Fase 3</div>
+      <div class="title">Extração</div>
+      <div class="desc">Regex extrai os dois blocos de código (<code>```kotlin</code> e <code>```xml</code>) da resposta em markdown de cada LLM.</div>
+    </div>
+    <div class="phase-card">
+      <div class="num">Fase 4</div>
+      <div class="title">Build do APK</div>
+      <div class="desc">Código injetado em projeto-template. Gradle executa: <strong>kotlinc → AAPT2 → D8 → APK Builder</strong>. APK real gerado no container.</div>
+    </div>
+    <div class="phase-card">
+      <div class="num">Fase 5</div>
+      <div class="title">Análise Lint</div>
+      <div class="desc">Android Lint analisa o APK + fontes com 12 regras de acessibilidade. Resultados exportados em XML e HTML.</div>
+    </div>
+    <div class="phase-card">
+      <div class="num">Fase 6</div>
+      <div class="title">Relatório</div>
+      <div class="desc">Pipeline filtra apenas os problemas de acessibilidade, conta por severidade e exibe resumo comparativo entre os LLMs na interface web.</div>
+    </div>
+  </div>
+
+  <!-- ── 3. Arquitetura técnica ─────────────────────────── -->
+  <h2>3. Arquitetura Técnica</h2>
+
+  <div class="arch">
+    <span class="dim">┌─ Interface Web (FastAPI + uvicorn :8000) ────────────────────────┐</span><br/>
+    <span class="dim">│</span>  Browser <span class="accent">→</span> POST /api/run  <span class="accent">→</span>  Server-Sent Events (SSE)           <span class="dim">│</span><br/>
+    <span class="dim">│</span>  index.html · terminal colorido · badges de status de LLMs        <span class="dim">│</span><br/>
+    <span class="dim">└──────────────────────────────────────────────────────────────────┘</span><br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="accent">↓</span>  subprocess (pipeline.py)<br/>
+    <span class="dim">┌─ Pipeline Core ──────────────────────────────────────────────────┐</span><br/>
+    <span class="dim">│</span>  llm_client.py   <span class="dim"># asyncio.gather → 3 LLMs simultâneos</span>           <span class="dim">│</span><br/>
+    <span class="dim">│</span>  code_extractor.py  <span class="dim"># regex extrai .kt + .xml de markdown</span>         <span class="dim">│</span><br/>
+    <span class="dim">│</span>  pipeline.py     <span class="dim"># orquestra build + lint por LLM</span>                  <span class="dim">│</span><br/>
+    <span class="dim">│</span>  report_generator.py  <span class="dim"># parse lint-results.xml → resumo</span>            <span class="dim">│</span><br/>
+    <span class="dim">└──────────────────────────────────────────────────────────────────┘</span><br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="accent">↓</span>  por LLM<br/>
+    <span class="dim">┌─ Build Toolchain (dentro do container) ──────────────────────────┐</span><br/>
+    <span class="dim">│</span>  <span class="accent">kotlinc</span>   → compila MainActivity.kt → .class                     <span class="dim">│</span><br/>
+    <span class="dim">│</span>  <span class="accent">AAPT2</span>    → compila resources (XML) → flat + linked              <span class="dim">│</span><br/>
+    <span class="dim">│</span>  <span class="accent">D8</span>       → .class → classes.dex (Dalvik bytecode)               <span class="dim">│</span><br/>
+    <span class="dim">│</span>  <span class="accent">apksigner</span> → assina o APK                                        <span class="dim">│</span><br/>
+    <span class="dim">│</span>  <span class="accent">Lint</span>     → analisa AST Kotlin + DOM XML → lint-results.xml      <span class="dim">│</span><br/>
+    <span class="dim">└──────────────────────────────────────────────────────────────────┘</span>
+  </div>
+
+  <h3>Stack tecnológico</h3>
+  <div class="stack-grid">
+    <div class="stack-item"><div class="sname">Python 3.11</div><div class="srole">Orquestração</div></div>
+    <div class="stack-item"><div class="sname">FastAPI</div><div class="srole">Web / SSE</div></div>
+    <div class="stack-item"><div class="sname">Docker</div><div class="srole">Isolamento</div></div>
+    <div class="stack-item"><div class="sname">Gradle 8.4</div><div class="srole">Build Android</div></div>
+    <div class="stack-item"><div class="sname">OpenJDK 21</div><div class="srole">JVM / Kotlin</div></div>
+    <div class="stack-item"><div class="sname">Android SDK 34</div><div class="srole">Platform tools</div></div>
+    <div class="stack-item"><div class="sname">Android Lint</div><div class="srole">Análise estática</div></div>
+    <div class="stack-item"><div class="sname">asyncio</div><div class="srole">Concorrência</div></div>
+  </div>
+
+  <!-- ── 4. LLMs ────────────────────────────────────────── -->
+  <h2>4. Modelos de Linguagem Suportados</h2>
+
+  <table>
+    <thead>
+      <tr><th>Provedor</th><th>Modelo</th><th>SDK Python</th><th>Modo</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Google Gemini</strong></td>
+        <td>gemini-2.5-flash</td>
+        <td><code>google-genai</code></td>
+        <td><span class="tag tag-blue">thread executor</span></td>
+      </tr>
+      <tr>
+        <td><strong>OpenAI</strong></td>
+        <td>gpt-4o</td>
+        <td><code>openai</code></td>
+        <td><span class="tag tag-ok">async nativo</span></td>
+      </tr>
+      <tr>
+        <td><strong>Anthropic</strong></td>
+        <td>claude-3-5-sonnet</td>
+        <td><code>anthropic</code></td>
+        <td><span class="tag tag-ok">async nativo</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    Os três modelos são chamados em paralelo com <code>asyncio.gather()</code>. LLMs sem chave de API
+    configurada são ignorados silenciosamente. A interface web exibe badges coloridos indicando quais
+    modelos estão disponíveis em tempo real via <code>GET /api/status</code>.
+  </p>
+
+  <!-- ── 5. Análise de acessibilidade ───────────────────── -->
+  <h2>5. Análise de Acessibilidade (Android Lint)</h2>
+
+  <p>
+    O Android Lint é a ferramenta de análise estática oficial do ecossistema Android. Ele opera
+    em dois domínios complementares:
+  </p>
+  <ul style="padding-left:20px; margin-bottom:12px;">
+    <li style="margin-bottom:6px;"><strong>AST Kotlin/Java</strong> — analisa a árvore sintática do código-fonte, verificando chamadas de API, configurações de listeners e uso correto de atributos programáticos.</li>
+    <li style="margin-bottom:6px;"><strong>DOM XML</strong> — percorre os arquivos de layout, verificando atributos como <code>contentDescription</code>, tamanhos de toque, contraste de cores e rótulos.</li>
+  </ul>
+
+  <p>O pipeline configura 12 verificações de acessibilidade com severidade personalizada em <code>app/lint.xml</code>:</p>
+
+  <table>
+    <thead>
+      <tr><th>Check ID</th><th>Descrição</th><th>Severidade</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>ContentDescription</code></td><td>ImageView/ImageButton sem descrição</td><td><span class="tag tag-error">ERROR</span></td></tr>
+      <tr><td><code>ClickableViewAccessibility</code></td><td>View clicável sem suporte a teclado</td><td><span class="tag tag-error">ERROR</span></td></tr>
+      <tr><td><code>LabelFor</code></td><td>Campo de entrada sem rótulo vinculado</td><td><span class="tag tag-error">ERROR</span></td></tr>
+      <tr><td><code>KeyboardInaccessibleWidget</code></td><td>Widget inacessível via teclado</td><td><span class="tag tag-error">ERROR</span></td></tr>
+      <tr><td><code>TouchTargetSizeCheck</code></td><td>Área de toque menor que 48×48dp</td><td><span class="tag tag-warn">WARNING</span></td></tr>
+      <tr><td><code>ImageContrastAttr</code></td><td>Contraste insuficiente em imagens</td><td><span class="tag tag-warn">WARNING</span></td></tr>
+      <tr><td><code>TextContrastAttr</code></td><td>Contraste insuficiente em texto</td><td><span class="tag tag-warn">WARNING</span></td></tr>
+      <tr><td><code>SmallSp</code></td><td>Texto menor que 12sp</td><td><span class="tag tag-warn">WARNING</span></td></tr>
+      <tr><td><code>HardcodedText</code></td><td>Texto hardcoded (não internacionalizável)</td><td><span class="tag tag-warn">WARNING</span></td></tr>
+      <tr><td><code>RelativeOverlap</code></td><td>Elementos sobrepostos em RelativeLayout</td><td><span class="tag tag-warn">WARNING</span></td></tr>
+      <tr><td><code>DuplicateSpeakableText</code></td><td>Múltiplos elementos com mesmo texto falado</td><td><span class="tag tag-warn">WARNING</span></td></tr>
+      <tr><td><code>SpeakableTextPresentCheck</code></td><td>Elemento interativo sem texto falável</td><td><span class="tag tag-warn">WARNING</span></td></tr>
+    </tbody>
+  </table>
+
+  <!-- ── 6. Pontos fortes / fracos ─────────────────────── -->
+  <h2>6. Pontos Fortes e Limitações</h2>
+
+  <div class="two-col">
+    <div class="box box-green">
+      <h3>Pontos Fortes</h3>
+      <ul>
+        <li>Pipeline totalmente automatizado: do prompt ao relatório, sem intervenção manual</li>
+        <li>Ambiente reproduzível via Docker — funciona em qualquer máquina</li>
+        <li>Comparação direta entre 3 LLMs no mesmo prompt</li>
+        <li>APK real compilado e testado — não apenas análise de texto</li>
+        <li>Interface web com terminal ao vivo e indicadores visuais</li>
+        <li>Separação entre prompt variável e instruções técnicas fixas</li>
+        <li>Biblioteca de prompts pré-definidos para cenários comuns</li>
+        <li>Relatório HTML detalhado gerado pelo Lint para análise profunda</li>
+      </ul>
+    </div>
+    <div class="box box-red">
+      <h3>Limitações Atuais</h3>
+      <ul>
+        <li>Apenas código de uma Activity por execução</li>
+        <li>Lint estático não detecta problemas de acessibilidade em tempo de execução</li>
+        <li>LLMs ocasionalmente geram código com erros de compilação</li>
+        <li>Sem persistência histórica das execuções</li>
+        <li>Análise limitada ao sistema de Views Android (sem Compose)</li>
+        <li>Custo de API por execução (especialmente GPT-4o)</li>
+        <li>Build lento (~1-3 min por LLM) devido ao Gradle</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── 7. Estrutura do projeto ────────────────────────── -->
+  <h2>7. Estrutura do Projeto</h2>
+
+  <div class="arch">
+    accessibility-llm-pipeline/<br/>
+    <span class="accent">├─</span> src/<br/>
+    <span class="dim">│  ├─</span> pipeline.py          <span class="dim"># orquestrador principal</span><br/>
+    <span class="dim">│  ├─</span> llm_client.py        <span class="dim"># clientes Gemini / OpenAI / Anthropic</span><br/>
+    <span class="dim">│  ├─</span> code_extractor.py    <span class="dim"># extração de blocos de código</span><br/>
+    <span class="dim">│  ├─</span> report_generator.py  <span class="dim"># parse e filtragem do relatório Lint</span><br/>
+    <span class="dim">│  ├─</span> web_server.py        <span class="dim"># API FastAPI + streaming SSE</span><br/>
+    <span class="dim">│  └─</span> templates/<br/>
+    <span class="dim">│     └─</span> index.html         <span class="dim"># interface web (terminal-first)</span><br/>
+    <span class="accent">├─</span> templates/android-project/  <span class="dim"># template de projeto Android</span><br/>
+    <span class="dim">│  ├─</span> app/src/main/<br/>
+    <span class="dim">│  │  ├─</span> java/…/MainActivity.kt  <span class="dim"># substituído em cada execução</span><br/>
+    <span class="dim">│  │  └─</span> res/layout/activity_main.xml<br/>
+    <span class="dim">│  ├─</span> app/lint.xml         <span class="dim"># 12 regras de acessibilidade</span><br/>
+    <span class="dim">│  └─</span> gradle.properties    <span class="dim"># AndroidX habilitado</span><br/>
+    <span class="accent">├─</span> prompts/              <span class="dim"># prompts salvos (prompt.txt + biblioteca)</span><br/>
+    <span class="accent">├─</span> outputs/              <span class="dim"># APKs e relatórios gerados</span><br/>
+    <span class="accent">├─</span> Dockerfile<br/>
+    <span class="accent">├─</span> docker-compose.yml<br/>
+    <span class="accent">└─</span> requirements.txt
+  </div>
+
+  <!-- ── 8. Trabalho futuro ─────────────────────────────── -->
+  <h2>8. Trabalho Futuro</h2>
+
+  <ul class="future-list">
+    <li>
+      <div class="icon">📱</div>
+      <div class="text">
+        <strong>Google Accessibility Scanner</strong>
+        <span>Integrar o Accessibility Scanner (via UIAutomator) para análise dinâmica em emulador Android — complementando a análise estática do Lint com verificações em tempo de execução.</span>
+      </div>
+    </li>
+    <li>
+      <div class="icon">📊</div>
+      <div class="text">
+        <strong>Histórico de execuções e métricas comparativas</strong>
+        <span>Banco de dados SQLite para armazenar resultados de cada execução e gerar gráficos comparativos entre LLMs ao longo do tempo — essencial para a análise estatística da dissertação.</span>
+      </div>
+    </li>
+    <li>
+      <div class="icon">🔄</div>
+      <div class="text">
+        <strong>Regeneração iterativa</strong>
+        <span>Enviar os problemas de acessibilidade encontrados de volta ao LLM e pedir correções automaticamente — medir se os modelos conseguem auto-corrigir código inacessível.</span>
+      </div>
+    </li>
+    <li>
+      <div class="icon">📄</div>
+      <div class="text">
+        <strong>Exportação de relatório PDF</strong>
+        <span>Geração automática de relatório PDF comparativo ao final de cada execução, adequado para anexar à dissertação.</span>
+      </div>
+    </li>
+    <li>
+      <div class="icon">🎨</div>
+      <div class="text">
+        <strong>Suporte a Jetpack Compose</strong>
+        <span>Expandir o pipeline para gerar e analisar código Compose (novo toolkit de UI do Android), além do sistema tradicional de Views.</span>
+      </div>
+    </li>
+    <li>
+      <div class="icon">🔍</div>
+      <div class="text">
+        <strong>Análise de múltiplas Activities</strong>
+        <span>Suporte a prompts que descrevem fluxos completos com múltiplas telas, gerando e analisando vários arquivos de layout por execução.</span>
+      </div>
+    </li>
+  </ul>
+
+  <!-- ── 9. Como executar ────────────────────────────────── -->
+  <h2>9. Como Executar</h2>
+
+  <table>
+    <thead>
+      <tr><th>#</th><th>Passo</th><th>Comando</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>Clonar o repositório</td><td><code>git clone &lt;repo-url&gt;</code></td></tr>
+      <tr><td>2</td><td>Configurar chaves de API</td><td>Criar <code>.env</code> com <code>GEMINI_API_KEY</code>, <code>OPENAI_API_KEY</code>, <code>ANTHROPIC_API_KEY</code></td></tr>
+      <tr><td>3</td><td>Construir o container</td><td><code>docker-compose up --build</code></td></tr>
+      <tr><td>4</td><td>Acessar a interface</td><td>Abrir <code>http://localhost:8000</code> no navegador</td></tr>
+      <tr><td>5</td><td>Executar análise</td><td>Selecionar prompt, clicar em <strong>Executar Pipeline</strong></td></tr>
+      <tr><td>6</td><td>Ver relatório detalhado</td><td><code>outputs/&lt;llm&gt;/lint-report.html</code></td></tr>
+    </tbody>
+  </table>
+
+  <!-- ── Rodapé ────────────────────────────────────────── -->
+  <div class="footer">
+    <p><strong>Accessibility LLM Pipeline</strong> &mdash; Dissertação de Mestrado &mdash; Abril de 2026</p>
+    <p style="margin-top:4px; font-size:8pt;">
+      Para imprimir como PDF: Ctrl+P (ou Cmd+P) &rarr; Destino: "Salvar como PDF" &rarr; Tamanho: A4
+    </p>
+  </div>
+
+</div><!-- /content -->
+</body>
+</html>

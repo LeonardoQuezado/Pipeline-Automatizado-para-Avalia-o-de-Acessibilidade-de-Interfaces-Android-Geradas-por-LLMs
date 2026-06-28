@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- ── Critical accessibility errors ─────────────────────────────────── -->
+    <!-- Missing descriptions break screen readers entirely -->
+    <issue id="ContentDescription"         severity="error" />
+    <issue id="ClickableViewAccessibility"  severity="error" />
+    <issue id="LabelFor"                   severity="error" />
+    <issue id="KeyboardInaccessibleWidget"  severity="error" />
+    <issue id="SpeakableTextPresentCheck"  severity="error" />
+
+    <!-- Touch targets below 48dp — elevated from warning to error -->
+    <issue id="TouchTargetSizeCheck"       severity="error" />
+
+    <!-- Contrast below WCAG AA — critical for low-vision users -->
+    <issue id="TextContrastAttr"           severity="error" />
+    <issue id="ImageContrastAttr"          severity="error" />
+
+    <!-- Overlapping/duplicate clickable areas confuse screen readers -->
+    <issue id="DuplicateClickableBounds"   severity="error" />
+    <issue id="DuplicateSpeakableText"     severity="error" />
+    <issue id="RelativeOverlap"            severity="error" />
+
+    <!-- ── Accessibility warnings ─────────────────────────────────────────── -->
+    <!-- Text too small — affects users with low vision -->
+    <issue id="SmallSp"                    severity="warning" />
+
+    <!-- Hardcoded text blocks i18n and screen-reader customisation -->
+    <issue id="HardcodedText"              severity="warning" />
+
+    <!-- Missing autofill hints on input fields (login/register screens) -->
+    <issue id="Autofill"                   severity="warning" />
+
+    <!-- TextInputLayout best-practice (wrapping EditText improves a11y) -->
+    <issue id="TextFields"                 severity="warning" />
+</lint>

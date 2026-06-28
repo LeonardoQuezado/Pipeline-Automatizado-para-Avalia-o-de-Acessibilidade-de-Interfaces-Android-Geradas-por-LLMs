@@ -1,0 +1,1 @@
+Create the complete code for a product details screen for a native Android application using Jetpack Compose with Material 3. The screen must display a colored Box placeholder where the product image would appear, followed by the product name, description, and price, along with "Add to Cart" and "Favorite" buttons. Generate appropriate texts for each element on the screen.

@@ -1,0 +1,14 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+dependencies {
+    compileOnly "com.android.tools.lint:lint-api:31.2.2"
+    compileOnly "com.android.tools.lint:lint-checks:31.2.2"
+}
+
+jar {
+    manifest {
+        attributes('Lint-Registry-v2': 'com.accessibility.lint.ComposeA11yIssueRegistry')
+    }
+}

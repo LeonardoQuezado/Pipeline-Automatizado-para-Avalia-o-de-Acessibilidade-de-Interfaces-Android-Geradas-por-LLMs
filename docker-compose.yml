@@ -1,0 +1,29 @@
+services:
+  pipeline:
+    build: .
+    env_file:
+      - .env
+    environment:
+      - EMULATOR_HOST=${EMULATOR_HOST:-}
+    volumes:
+      - ./outputs:/app/outputs      # generated APKs and lint reports
+      - ./src:/app/src              # live-reload source during dev
+      - ./templates:/app/templates  # Android project template
+      - ./prompts:/app/prompts      # custom prompts (optional)
+      - gradle-cache:/root/.gradle  # persist Gradle/Robolectric cache across container restarts
+      # ADB keys from Windows host — lets Docker authenticate to the same phone/emulator.
+      # Set ADB_KEYS_DIR=C:/Users/<you>/.android in .env (forward slashes, no trailing slash).
+      - ${ADB_KEYS_DIR:-./adb-keys-placeholder}:/root/.android
+    working_dir: /app
+    ports:
+      - "8000:8000"
+    # Permite que o container alcance o Ollama rodando na máquina host.
+    # No Linux, host.docker.internal não é resolvido automaticamente — este
+    # extra_hosts cria a entrada de DNS apontando para o gateway do host.
+    # No Docker Desktop (Mac/Windows) já funciona sem isso.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: python src/web_server.py
+
+volumes:
+  gradle-cache:
