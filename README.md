@@ -196,3 +196,16 @@ e Gemini 3.1 Pro) em 8 tipos de interface móvel, nos modos claro e escuro,
 totalizando 48 execuções. O pipeline alcançou 100% de sucesso na compilação e
 reportou 409 ocorrências de acessibilidade distribuídas entre análise estática
 e dinâmica. Os resultados completos estão descritos no artigo em `article/main.tex`.
+
+
+## Autoria
+
+MELODIE foi criado e é mantido por **Leonardo Quezado**.
+
+## Como citar
+
+Se usar este software, cite-o conforme o arquivo [`CITATION.cff`](CITATION.cff) (botão "Cite this repository" na página do repositório).
+
+## Licença
+
+Distribuído sob a licença MIT. Veja [`LICENSE`](LICENSE).
