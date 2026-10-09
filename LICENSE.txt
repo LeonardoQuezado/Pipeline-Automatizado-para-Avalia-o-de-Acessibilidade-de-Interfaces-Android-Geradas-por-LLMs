@@ -2,7 +2,7 @@ Melodie A11Y — Pipeline de Avaliação e Correção de Acessibilidade de Inter
 Copyright (c) 2025–2026 Leonardo Quezado de Meneses
 
 Universidade Federal do Ceará (UFC) — Grupo de Redes de Alta Velocidade e Tecnologia (GREat)
-Contato: lionquezado@edu.unifor.br
+Contato:leonardoquezado@pm.me
 Repositório: https://github.com/LeonardoQuezado/accessibility-llm-pipeline
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -20,7 +20,7 @@ sujeita às seguintes condições:
 
      Leonardo Quezado de Meneses. Melodie A11Y: Pipeline de Avaliação e Correção
      Automatizada de Acessibilidade de Interfaces Móveis Geradas por IA Generativa.
-     UFC / GREat, 2025–2026. https://github.com/LeonardoQuezado/accessibility-llm-pipeline
+     UFC / GREat, 2025–2026. https://github.com/LeonardoQuezado/Pipeline-Automatizado-para-Avalia-o-de-Acessibilidade-de-Interfaces-Android-Geradas-por-LLMs
 
 2. USO NÃO COMERCIAL
    O Software não pode ser utilizado, direta ou indiretamente, para fins
@@ -49,4 +49,4 @@ sujeita às seguintes condições:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Para solicitações de uso comercial ou licenciamento empresarial, entre em
-contato com o autor: lionquezado@edu.unifor.br
+contato com o autor: leonardoquezado@pm.me
