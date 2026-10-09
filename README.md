@@ -200,7 +200,7 @@ e dinâmica. Os resultados completos estão descritos no artigo em `article/main
 
 ## Autoria
 
-MELODIE foi criado e é mantido por **Leonardo Quezado**.
+O Pipeline Automatizado (MELODIE) foi criado e é mantido por **Leonardo Quezado**.
 
 ## Como citar
 
