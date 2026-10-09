@@ -1,0 +1,52 @@
+Melodie A11Y — Pipeline de Avaliação e Correção de Acessibilidade de Interfaces Móveis
+Copyright (c) 2025–2026 Leonardo Quezado de Meneses
+
+Universidade Federal do Ceará (UFC) — Grupo de Redes de Alta Velocidade e Tecnologia (GREat)
+Contato: lionquezado@edu.unifor.br
+Repositório: https://github.com/LeonardoQuezado/accessibility-llm-pipeline
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LICENÇA DE USO ACADÊMICO E NÃO COMERCIAL
+
+É concedida, gratuitamente, permissão para qualquer pessoa obter uma cópia
+deste software e dos arquivos de documentação associados (o "Software"), para
+utilizá-lo exclusivamente para fins acadêmicos, científicos e educacionais,
+sujeita às seguintes condições:
+
+1. ATRIBUIÇÃO OBRIGATÓRIA
+   Todo uso do Software — incluindo execução, modificação, distribuição parcial
+   ou incorporação em outro trabalho — deve incluir citação explícita ao autor:
+
+     Leonardo Quezado de Meneses. Melodie A11Y: Pipeline de Avaliação e Correção
+     Automatizada de Acessibilidade de Interfaces Móveis Geradas por IA Generativa.
+     UFC / GREat, 2025–2026. https://github.com/LeonardoQuezado/accessibility-llm-pipeline
+
+2. USO NÃO COMERCIAL
+   O Software não pode ser utilizado, direta ou indiretamente, para fins
+   comerciais sem autorização prévia e por escrito do autor. Fins comerciais
+   incluem, sem limitação: venda do Software ou derivados, prestação de serviços
+   remunerados baseados no Software, uso em produtos comerciais ou plataformas
+   com fins lucrativos.
+
+3. MODIFICAÇÕES E OBRAS DERIVADAS
+   Modificações e obras derivadas são permitidas exclusivamente para fins não
+   comerciais e devem manter este aviso de licença e a atribuição ao autor
+   original. Obras derivadas não podem ser sub-licenciadas sob termos mais
+   permissivos que os desta licença.
+
+4. REDISTRIBUIÇÃO
+   A redistribuição do Software, com ou sem modificações, é permitida desde que:
+   (a) este aviso de licença seja mantido integralmente;
+   (b) a redistribuição não ocorra com fins comerciais;
+   (c) a atribuição ao autor original seja preservada.
+
+5. SEM GARANTIAS
+   O SOFTWARE É FORNECIDO "NO ESTADO EM QUE SE ENCONTRA" (AS IS), SEM GARANTIA
+   DE QUALQUER TIPO, EXPRESSA OU IMPLÍCITA. O AUTOR NÃO SE RESPONSABILIZA POR
+   QUAISQUER DANOS DECORRENTES DO USO DO SOFTWARE.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Para solicitações de uso comercial ou licenciamento empresarial, entre em
+contato com o autor: lionquezado@edu.unifor.br
