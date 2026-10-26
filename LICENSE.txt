@@ -3,7 +3,7 @@ Copyright (c) 2025–2026 Leonardo Quezado de Meneses
 
 Universidade Federal do Ceará (UFC) — Grupo de Redes de Alta Velocidade e Tecnologia (GREat)
 Contato:leonardoquezado@pm.me
-Repositório: https://github.com/LeonardoQuezado/accessibility-llm-pipeline
+Repositório: https://github.com/LeonardoQuezado/Pipeline-Automatizado-para-Avalia-o-de-Acessibilidade-de-Interfaces-Android-Geradas-por-LLMs/tree/main
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
